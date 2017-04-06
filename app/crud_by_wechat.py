@@ -1,5 +1,5 @@
 import time
-from app.models import Bullet, User
+from app.models import Bullet, User, Action
 from . import db
 
 def register_by_wechat(wechat_id):
@@ -128,4 +128,32 @@ def auto_push_bullet_by_wechat(user_id, btype1,btype2,btype3):
 		ble['timestamp'] = bullet.timestamp
 		ble['user_id'] = bullet.user_id
 		rep.append(ble.copy())
+	return rep
+
+
+def creat_action_by_wechat(body):
+	new_action = Action(content=body['content'], timestamp_begin=int(time.time()),user_id = body['user_id'])
+	db.session.add(new_action)
+	db.session.commit()
+	rep = {
+		'id': new_action.id,
+		'content': new_action.content,
+		'timestamp_begin': new_action.timestamp_begin,
+		'user_id': new_action.user_id
+	}
+	return rep
+
+
+def update_action_by_wechat(aid):
+	old_action = Action.query.filter_by(id=aid).first()
+	old_action.timestamp_end = int(time.time())
+	db.session.add(old_action)
+	db.session.commit()
+	rep = {
+		'id': old_action.id,
+		'content': old_action.content,
+		'timestamp_begin': old_action.timestamp_begin,
+		'timestamp_end': old_action.timestamp_end,
+		'user_id': old_action.user_id
+	}
 	return rep

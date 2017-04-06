@@ -60,3 +60,13 @@ class Bullet(db.Model):
 @login_manager.user_loader
 def load_user(user_id):
 	return User.query.get(int(user_id))
+
+
+
+class Action(db.Model):
+	__tablename__ = 'actions'
+	id = db.Column(db.Integer, primary_key=True)
+	content = db.Column(db.Text, nullable=False)
+	timestamp_begin = db.Column(db.Integer, nullable=False, index=True, default=int(time.time()))
+	timestamp_end = db.Column(db.Integer, nullable=False, index=True, default=int(time.time()))
+	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

@@ -126,3 +126,25 @@ def put_bullet_by_wechat(bid):
 @main.route('/wechat/api/bullets/<int:bid>', methods=['GET'])
 def get_a_bullet_by_wechat(bid):
 	pass
+
+
+# 行为耗时记录
+
+@main.route('/api/actions', methods=['POST'])
+def create_a_action():
+	req = request.get_data(as_text=True)
+	# print(req)
+	body = json.loads(req)
+	rep = crud_by_wechat.creat_action_by_wechat(body)
+	# print('rep:',rep)
+	return jsonify(rep)
+
+
+@main.route('/api/actions/<int:aid>', methods=['PUT'])
+def update_a_action(aid):
+	# req = request.get_data(as_text=True)
+	# # print(req)
+	# body = json.loads(req)
+	rep = crud_by_wechat.update_action_by_wechat(aid)#,body)
+	# print('rep:',rep)
+	return jsonify(rep)
